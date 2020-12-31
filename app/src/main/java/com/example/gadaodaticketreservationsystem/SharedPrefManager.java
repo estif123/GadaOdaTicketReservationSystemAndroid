@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.example.gadaodaticketreservationsystem.Model.User;
+
 public class SharedPrefManager {
     private static final String SHARED_PREF_NAME = "volleyregisterlogin";
     private static final String KEY_USERNAME = "keyusername";
@@ -48,12 +50,12 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return new User(
                 sharedPreferences.getInt(KEY_ID, -1),
-                sharedPreferences.getString(KEY_USERNAME, null),
                 sharedPreferences.getString(KEY_PHONE_NUMBER, null),
-                sharedPreferences.getString(KEY_EMAIL, null),
+                sharedPreferences.getString(KEY_USERNAME, null),
+                sharedPreferences.getString(KEY_GENDER, null),
                 sharedPreferences.getString(KEY_PASSWORD, null),
-                sharedPreferences.getString(KEY_GENDER, null)
-        );
+                sharedPreferences.getString(KEY_EMAIL, null)
+                );
     }
 
     //this method will logout the user

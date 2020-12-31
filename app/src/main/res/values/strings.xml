@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GadaOdaTicketReservationSystem</string>
+    <string name="no_schedule_found">No schedule found</string>
 </resources>

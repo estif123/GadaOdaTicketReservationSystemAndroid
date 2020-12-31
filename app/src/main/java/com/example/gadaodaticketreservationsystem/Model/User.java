@@ -1,4 +1,4 @@
-package com.example.gadaodaticketreservationsystem;
+package com.example.gadaodaticketreservationsystem.Model;
 
 public class User {
     private int id;

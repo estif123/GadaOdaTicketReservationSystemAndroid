@@ -14,9 +14,8 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.gadaodaticketreservationsystem.Model.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -153,9 +152,9 @@ public class Register extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("phone_number", phone_number);
-                params.put("email", email);
-                params.put("password", password);
                 params.put("gender", gender);
+                params.put("password", password);
+                params.put("email", email);
                 return params;
             }
         };

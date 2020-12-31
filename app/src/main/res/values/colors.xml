@@ -7,4 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorRed">#F44336</color>
+    <color name="colorGreen">#4CAF50</color>
+    <color name="msg_no_usres">#999</color>
+    <color name="hint_enter_user">#89c3c3c3</color>
+    <color name="timestamp">#858585</color>
+    <color name="user_list_text">#232323</color>
+    <color name="msg_list_text">#232323</color>
+
 </resources>
