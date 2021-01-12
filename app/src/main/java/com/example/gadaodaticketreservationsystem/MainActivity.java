@@ -3,6 +3,7 @@ package com.example.gadaodaticketreservationsystem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,40 +31,41 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-            tabLayout = findViewById(R.id.tablayout);
-            viewPager= findViewById(R.id.viewPager);
-            tabSchedule= findViewById(R.id.tab_schedule);
-            tabReservation= findViewById(R.id.tab_reservation);
 
-        pageAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(pageAdapter);
-        viewPager.setOffscreenPageLimit(2);
+
+        if(SharedPrefManager.getInstance(this).isLoggedIn()){
+            tabLayout = findViewById(R.id.tablayout);
+            viewPager = findViewById(R.id.viewPager);
+            tabSchedule = findViewById(R.id.tab_schedule);
+            tabReservation = findViewById(R.id.tab_reservation);
+
+            pageAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+            viewPager.setAdapter(pageAdapter);
+            viewPager.setOffscreenPageLimit(2);
 
 //      ScheduleFragment scheduleFragment = new ScheduleFragment();
 //        ReservationFragment reservationFragment = new ReservationFragment();
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    viewPager.setCurrentItem(tab.getPosition());
+                }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-    }
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
 
 
-        //        if(SharedPrefManager.getInstance(this).isLoggedIn()){
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
 //            id = findViewById(R.id.textViewId);
 //            userName = findViewById(R.id.textViewUsername);
 //            userEmail = findViewById(R.id.textViewEmail);
@@ -83,11 +85,12 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                }
 //            });
-//        }
-//        else{
-//            Intent intent = new Intent(MainActivity.this,loginActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        }
+        else{
+            Intent intent = new Intent(MainActivity.this,loginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 
 }

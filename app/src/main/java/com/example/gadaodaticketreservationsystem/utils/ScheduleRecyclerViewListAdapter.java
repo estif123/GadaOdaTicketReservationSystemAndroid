@@ -40,7 +40,7 @@ public class ScheduleRecyclerViewListAdapter extends RecyclerView.Adapter<Schedu
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final ScheduleViewModel schedule = scheduleList.get(position);
 
-        holder.schedule_Id.setText(schedule.getSchedule_Id());
+        holder.schedule_Id.setText(String.valueOf(schedule.getSchedule_Id()));
         holder.departure_city.setText(schedule.getDeparture_city());
         holder.destination_city.setText(schedule.getDestination_city());
         // Displaying dot from HTML character code
@@ -91,6 +91,10 @@ public class ScheduleRecyclerViewListAdapter extends RecyclerView.Adapter<Schedu
 //        }
 
         return "";
+    }
+    public void setItems(List<ScheduleViewModel> scheduleViewModelList){
+        scheduleList = scheduleViewModelList;
+        notifyDataSetChanged();
     }
 
 }

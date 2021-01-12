@@ -1,5 +1,7 @@
 package com.example.gadaodaticketreservationsystem.ui;
 
+import android.app.Application;
+
 import androidx.lifecycle.ViewModel;
 
 import java.util.Date;
@@ -11,15 +13,17 @@ public class ScheduleViewModel extends ViewModel {
     int route;
     String date;
 
-    public ScheduleViewModel(int schedule_Id, String departure_city, String destination_city, int route, String date) {
+    public ScheduleViewModel(int schedule_Id, String departure_city, String destination_city, String date) {
 
         this.schedule_Id = schedule_Id;
         this.departure_city = departure_city;
         this.destination_city = destination_city;
-        this.route = route;
         this.date = date;
     }
 
+    public ScheduleViewModel(Application application) {
+
+    }
 
 
     public int getSchedule_Id() {
@@ -44,14 +48,6 @@ public class ScheduleViewModel extends ViewModel {
 
     public void setDestination_city(String destination_city) {
         this.destination_city = destination_city;
-    }
-
-    public int getRoute() {
-        return route;
-    }
-
-    public void setRoute(int route) {
-        this.route = route;
     }
 
     public String getDate() {

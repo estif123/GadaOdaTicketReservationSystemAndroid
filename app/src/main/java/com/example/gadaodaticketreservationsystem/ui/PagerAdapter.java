@@ -19,9 +19,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ReservationFragment();
-            case 1:
                 return new ScheduleFragment();
+            case 1:
+                return new ReservationFragment();
             default:
                 return null;
         }

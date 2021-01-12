@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.example.gadaodaticketreservationsystem.VolleySingleton;
 import com.example.gadaodaticketreservationsystem.utils.DividerItemDecoration;
 import com.example.gadaodaticketreservationsystem.utils.ScheduleRecyclerViewListAdapter;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +39,9 @@ public class ScheduleFragment extends Fragment {
     private ScheduleViewModel mViewModel;
     ScheduleRecyclerViewListAdapter scheduleRecyclerViewListAdapter;
     private TextView no_schedule_tv;
+    RecyclerView recyclerView;
     private List<ScheduleViewModel> scheduleViewModelList =new ArrayList<>();
+    String TAG = "The tag message";
 
     public static ScheduleFragment newInstance() {
         return new ScheduleFragment();
@@ -46,29 +50,40 @@ public class ScheduleFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View schedule_fragment_layout = inflater.inflate(R.layout.schedule_list, container, false);
-        no_schedule_tv = schedule_fragment_layout.findViewById(R.id.empty_schedule_view);
+        Log.d("LOG : ", "onCreatedView Run");
+        View schedule_fragment_layout = inflater.inflate(R.layout.schedule_fragment, container, false);
 
-        scheduleViewModelList.addAll(getSchedule());
 
-        RecyclerView recyclerView = (RecyclerView) schedule_fragment_layout.findViewById(R.id.recyclerView);
-        scheduleRecyclerViewListAdapter= new ScheduleRecyclerViewListAdapter(getContext(), scheduleViewModelList) {
-        };
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL, 16));
-        recyclerView.setAdapter(scheduleRecyclerViewListAdapter);
-        toggleEmptySchedules();
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 16));
+     //   no_schedule_tv = schedule_fragment_layout.findViewById(R.id.empty_schedule_view);
+
+//        toggleEmptySchedules();
 
         return inflater.inflate(R.layout.schedule_fragment, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getSchedule();
+        recyclerView =  view.findViewById(R.id.recyclerView2);
+        recyclerView.setHasFixedSize(true);
+        Log.i(TAG, "onViewCreated: is called");
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 16));
+        scheduleRecyclerViewListAdapter= new ScheduleRecyclerViewListAdapter(getActivity(), scheduleViewModelList);
+        recyclerView.setAdapter(scheduleRecyclerViewListAdapter);
+
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ScheduleViewModel.class);
+        mViewModel = new ViewModelProvider(this,new ScheduleFactory(getActivity().getApplication())).get(ScheduleViewModel.class);
         // TODO: Use the ViewModel
     }
     private void toggleEmptySchedules() {
@@ -81,29 +96,38 @@ public class ScheduleFragment extends Fragment {
     }
 
 
-
-    private List<ScheduleViewModel> getSchedule() {
+    private void getSchedule() {
+        Log.i(TAG, "getSchedule: method is called from oncreate");
         //if everything is fine
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, URLs.URL_LOGIN, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, URLs.URL_SCHEDULE, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i =0; i < response.length(); i++){
+                Log.i(TAG, "onResponse: is called");
+
                     try {
+                        for (int i =0; i < response.length(); i++){
                         JSONObject scheduleObject = response.getJSONObject(i);
-                        ScheduleViewModel scheduleViewModel = new ScheduleViewModel(scheduleObject.getInt("schedule_Id"),scheduleObject.getString("departure_city"),
-                                scheduleObject.getString("destiantion_city"),
-                                scheduleObject.getInt("route"),scheduleObject.getString("date"));
-//                        scheduleViewModel.setSchedule_Id(scheduleObject.getInt("schedule_Id"));
-//                        scheduleViewModel.setDeparture_city(scheduleObject.getString("departure_city"));
-//                        scheduleViewModel.setDestination_city(scheduleObject.getString("destiantion_city"));
-//                        scheduleViewModel.setDate(scheduleObject.getString("date"));
+                        ScheduleViewModel scheduleViewModel = new ScheduleViewModel(scheduleObject.getInt("schedule_Id"),
+                                scheduleObject.getString("departure_city"),
+                                scheduleObject.getString("destination_city"),scheduleObject.getString("date"));
+                        scheduleViewModel.setSchedule_Id(scheduleObject.getInt("schedule_Id"));
+                        scheduleViewModel.setDeparture_city(scheduleObject.getString("departure_city"));
+                        scheduleViewModel.setDestination_city(scheduleObject.getString("destination_city"));
+                        scheduleViewModel.setDate(scheduleObject.getString("date"));
                         scheduleViewModelList.add(scheduleViewModel);
+                        System.out.println(scheduleObject.getString("destination_city"));
+                        Log.i(TAG,scheduleViewModelList.toString());
+                        }
+
+                        scheduleRecyclerViewListAdapter.notifyDataSetChanged();
+//                        scheduleRecyclerViewListAdapter.setItems(scheduleViewModelList);
+
+//                        recyclerView.setAdapter(scheduleRecyclerViewListAdapter);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
 
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -111,9 +135,9 @@ public class ScheduleFragment extends Fragment {
                     error.printStackTrace();
             }
         });
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonArrayRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
 
-        return scheduleViewModelList;
+
     }
 
 }
