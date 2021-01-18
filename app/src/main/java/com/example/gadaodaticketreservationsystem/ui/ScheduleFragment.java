@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class ScheduleFragment extends Fragment {
     private ScheduleViewModel mViewModel;
+    private SwipeRefreshLayout swipeRefreshLayout;
     ScheduleRecyclerViewListAdapter scheduleRecyclerViewListAdapter;
     private TextView no_schedule_tv;
     RecyclerView recyclerView;
@@ -51,16 +53,6 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.d("LOG : ", "onCreatedView Run");
-        View schedule_fragment_layout = inflater.inflate(R.layout.schedule_fragment, container, false);
-
-
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 16));
-     //   no_schedule_tv = schedule_fragment_layout.findViewById(R.id.empty_schedule_view);
-
-//        toggleEmptySchedules();
 
         return inflater.inflate(R.layout.schedule_fragment, container, false);
     }
@@ -68,18 +60,26 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getSchedule();
+
         recyclerView =  view.findViewById(R.id.recyclerView2);
         recyclerView.setHasFixedSize(true);
-        Log.i(TAG, "onViewCreated: is called");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 16));
         scheduleRecyclerViewListAdapter= new ScheduleRecyclerViewListAdapter(getActivity(), scheduleViewModelList);
         recyclerView.setAdapter(scheduleRecyclerViewListAdapter);
+        swipeRefreshLayout=view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                getSchedule();
 
+            }
+
+        });
+        getSchedule();
     }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -97,12 +97,13 @@ public class ScheduleFragment extends Fragment {
 
 
     private void getSchedule() {
+        scheduleRecyclerViewListAdapter.clear();
+
         Log.i(TAG, "getSchedule: method is called from oncreate");
         //if everything is fine
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, URLs.URL_SCHEDULE, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.i(TAG, "onResponse: is called");
 
                     try {
                         for (int i =0; i < response.length(); i++){
@@ -115,8 +116,7 @@ public class ScheduleFragment extends Fragment {
                         scheduleViewModel.setDestination_city(scheduleObject.getString("destination_city"));
                         scheduleViewModel.setDate(scheduleObject.getString("date"));
                         scheduleViewModelList.add(scheduleViewModel);
-                        System.out.println(scheduleObject.getString("destination_city"));
-                        Log.i(TAG,scheduleViewModelList.toString());
+
                         }
 
                         scheduleRecyclerViewListAdapter.notifyDataSetChanged();

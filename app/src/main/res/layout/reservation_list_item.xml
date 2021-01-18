@@ -10,6 +10,7 @@
     android:paddingRight="@dimen/activity_margin"
     android:paddingTop="@dimen/dimen_10"
     >
+
     <TextView
         android:id="@+id/dot"
         android:layout_width="wrap_content"
@@ -21,7 +22,6 @@
         android:lineSpacingExtra="0dp"
         android:textSize="@dimen/dot_text_size"
         android:layout_marginRight="@dimen/dot_margin_right" />
-
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         android:textSize="@dimen/timestamp" />
 
     <TextView
-        android:id="@+id/schedule_Id"
+        android:id="@+id/reservation_Id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/date"
@@ -39,25 +39,43 @@
         android:textColor="@color/user_list_text"
         android:textSize="@dimen/note_list_text"  />
     <TextView
-        android:id="@+id/depature_city"
+        android:id="@+id/schedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_10"
         android:layout_below="@id/date"
-        android:layout_toRightOf="@id/schedule_Id"
+        android:layout_toRightOf="@id/reservation_Id"
         android:textColor="@color/user_list_text"
         android:textSize="@dimen/note_list_text"
-        android:layout_toEndOf="@id/schedule_Id" />
+        android:layout_toEndOf="@id/reservation_Id" />
     <TextView
-        android:id="@+id/destination_city"
+        android:id="@+id/bus_Id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_10"
         android:layout_below="@id/date"
-        android:layout_toRightOf="@id/schedule_Id"
+        android:layout_toRightOf="@id/reservation_Id"
         android:textColor="@color/user_list_text"
         android:textSize="@dimen/note_list_text"
-        android:layout_toEndOf="@id/depature_city" />
-
-
+        android:layout_toEndOf="@id/schedule" />
+    <TextView
+        android:id="@+id/service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_below="@id/date"
+        android:layout_toRightOf="@id/reservation_Id"
+        android:textColor="@color/user_list_text"
+        android:textSize="@dimen/note_list_text"
+        android:layout_toEndOf="@id/bus_Id" />
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_below="@id/date"
+        android:layout_toRightOf="@id/reservation_Id"
+        android:textColor="@color/user_list_text"
+        android:textSize="@dimen/note_list_text"
+        android:layout_toEndOf="@id/service" />
 </RelativeLayout>
